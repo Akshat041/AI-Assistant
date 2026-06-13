@@ -1,10 +1,28 @@
 from google import genai
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
 import os
 from dotenv import load_dotenv
 import logging
+import models
+from database import SessionLocal, engine
+import models
+
+# temorary import for database connection test
+from database import engine
+
+app = FastAPI()
+
+models.Base.metadata.create_all(bind=engine)  # Create tables if they don't exist
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -29,8 +47,6 @@ class PromptRequest(BaseModel):
 class PromptResponse(BaseModel):
     response: str
 
-app = FastAPI()
-
 # Allow the frontend app to send requests to this backend.
 # Update these origins if your frontend runs on a different port.
 origins = [
@@ -51,7 +67,7 @@ async def root():
 
 # this is a post request that accepts a prompt and returns a response
 @app.post("/generate", response_model=PromptResponse)
-async def generate(prompt_request: PromptRequest):
+async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db)):
     """Accept a prompt from the frontend and return a mock response."""
     prompt = prompt_request.prompt
     # print(f"Received prompt: {prompt}")
@@ -64,6 +80,18 @@ async def generate(prompt_request: PromptRequest):
     except Exception as e:
         logger.exception(f"Error calling GenAI: {e}")
         raise HTTPException(status_code=500, detail=f"Error generating response: {e}")
+
+    # Persist to DB: create Conversation row, commit, refresh
+    try:
+        conv = models.Conversation(prompt=prompt, response=text)
+        db.add(conv)
+        db.commit()         # commit transaction
+        db.refresh(conv)    # populate conv.id and conv.created_at from DB
+    except Exception as e:
+        db.rollback()
+        logger.exception(f"Error saving conversation to DB: {e}")
+        # Optionally return the LLM response anyway or raise an error
+        raise HTTPException(status_code=500, detail="Failed to save conversation")
 
     logger.info(f"Generated response: {text}")
     return PromptResponse(response=text)
