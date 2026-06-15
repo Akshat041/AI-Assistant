@@ -167,7 +167,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -4.5px;
     border: 5px solid transparent;
@@ -181,4 +181,106 @@
     right: 0;
     border-right-color: var(--border);
   }
+}
+
+.App {
+  max-width: 780px;
+  margin: 32px auto;
+  padding: 0 20px 40px;
+  color: var(--text);
+}
+
+.App h1 {
+  margin-bottom: 24px;
+  font-size: clamp(2rem, 2.5vw, 3rem);
+}
+
+.prompt-input {
+  margin-bottom: 16px;
+}
+
+.prompt-input input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 28px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.response-section,
+.conversation-history-section {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.response-section h2,
+.conversation-history-section h2 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+
+.section-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 0 20px;
+}
+
+.response-box {
+  padding: 18px;
+  min-height: 120px;
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.conversation-history {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.conversation-entry {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow-soft);
+}
+
+.conversation-prompt,
+.conversation-response {
+  margin-bottom: 8px;
+}
+
+.conversation-response {
+  margin-bottom: 0;
+}
+
+.conversation-empty {
+  padding: 16px;
+  color: var(--muted);
 }
