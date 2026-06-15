@@ -9,16 +9,19 @@ export default function ConversationHistory({ conversations }) {
             No previous conversations yet.
           </div>
         ) : (
-          conversations.map((conversation) => (
-            <div key={conversation.id} className="conversation-entry">
-              <div className="conversation-prompt">
-                <strong>Prompt:</strong> {conversation.prompt}
+          [...conversations]
+            .slice()
+            .reverse()
+            .map((conversation) => (
+              <div key={conversation.id} className="conversation-entry">
+                <div className="conversation-prompt">
+                  <strong>Prompt:</strong> {conversation.prompt}
+                </div>
+                <div className="conversation-response">
+                  <strong>Response:</strong> {conversation.response}
+                </div>
               </div>
-              <div className="conversation-response">
-                <strong>Response:</strong> {conversation.response}
-              </div>
-            </div>
-          ))
+            ))
         )}
       </div>
     </section>
