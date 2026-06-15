@@ -2,16 +2,14 @@ from google import genai
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from typing import List
+from datetime import datetime
 from sqlalchemy.orm import Session
 import os
 from dotenv import load_dotenv
 import logging
 import models
 from database import SessionLocal, engine
-import models
-
-# temorary import for database connection test
-from database import engine
 
 app = FastAPI()
 
@@ -47,6 +45,16 @@ class PromptRequest(BaseModel):
 class PromptResponse(BaseModel):
     response: str
 
+
+class ConversationSchema(BaseModel):
+    id: int
+    prompt: str
+    response: str
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
 # Allow the frontend app to send requests to this backend.
 # Update these origins if your frontend runs on a different port.
 origins = [
@@ -70,7 +78,6 @@ async def root():
 async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db)):
     """Accept a prompt from the frontend and return a mock response."""
     prompt = prompt_request.prompt
-    # print(f"Received prompt: {prompt}")
     logger.info(f"Received prompt: {prompt}")
 
     # Generate a response using the GenAI model via the client.
@@ -83,8 +90,9 @@ async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db))
 
     # Persist to DB: create Conversation row, commit, refresh
     try:
+        # Create a new Conversation instance and add it to the session
         conv = models.Conversation(prompt=prompt, response=text)
-        db.add(conv)
+        db.add(conv)        # add to session
         db.commit()         # commit transaction
         db.refresh(conv)    # populate conv.id and conv.created_at from DB
     except Exception as e:
@@ -95,3 +103,8 @@ async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db))
 
     logger.info(f"Generated response: {text}")
     return PromptResponse(response=text)
+
+# returns all conversations from the database
+@app.get("/conversations", response_model=List[ConversationSchema])
+async def get_conversations(db: Session = Depends(get_db)):
+    return db.query(models.Conversation).all()
