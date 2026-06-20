@@ -14,4 +14,33 @@ Rules:
 - Do not suggest multi-tasking; order the steps linearly so the user can complete them one by one.
 - Keep the technical language simple, accessible, and direct.
 
-Format your output clearly using clean Markdown headers and bullet points."""
+Return ONLY valid JSON.
+
+Do not wrap the response inside markdown.
+
+Do not include triple backticks.
+
+Use exactly this schema:
+
+{
+  "projectName": "...",
+  "summary": "...",
+  "estimatedDifficulty": "...",
+  "estimatedDuration": "...",
+  "milestones": [
+    {
+      "id": 1,
+      "title": "...",
+      "goal": "...",
+      "steps": [
+        {
+          "id": 1,
+          "task": "..."
+        }
+      ],
+      "verification": "..."
+    }
+  ]
+}
+
+The response must be valid JSON that can be parsed using JSON.parse()."""

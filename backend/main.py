@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 import os
 from dotenv import load_dotenv
 import logging
-from backend.prompts.roadmap_prompt import SYSTEM_PROMPT
+from prompts.roadmap_prompt import SYSTEM_PROMPT
 import models
 from database import SessionLocal, engine
 
