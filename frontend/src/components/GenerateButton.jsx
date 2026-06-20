@@ -7,7 +7,7 @@ export default function MyButton({ onClick, disabled = false }) {
       onClick={onClick}
       disabled={disabled}
     >
-      {disabled ? "Generating..." : "Generate"}
+      {disabled ? "Generating..." : "Generate Roadmap"}
     </button>
   );
 }

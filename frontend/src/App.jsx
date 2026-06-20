@@ -46,7 +46,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>AI Assistant</h1>
+      <h1>AI Project Architect</h1>
       <PromptInput value={prompt} onChange={setPrompt} />
       <MyButton onClick={handleClick} disabled={loading} />
       <div className="response-section">

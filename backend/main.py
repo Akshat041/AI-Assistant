@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 import os
 from dotenv import load_dotenv
 import logging
+from backend.prompts.roadmap_prompt import SYSTEM_PROMPT
 import models
 from database import SessionLocal, engine
 
@@ -82,7 +83,7 @@ async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db))
 
     # Generate a response using the GenAI model via the client.
     try:
-        gen_response = client.models.generate_content(model=MODEL_NAME, contents=prompt)
+        gen_response = client.models.generate_content(model=MODEL_NAME, contents=[prompt, SYSTEM_PROMPT])
         text = getattr(gen_response, "text", None) or gen_response.output[0].content[0].text
     except Exception as e:
         logger.exception(f"Error calling GenAI: {e}")

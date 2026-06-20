@@ -3,7 +3,7 @@ export default function PromptInput({ value, onChange }) {
     <div className="prompt-input">
       <input
         type="text"
-        placeholder="Enter your prompt..."
+        placeholder="Describe your project idea..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
