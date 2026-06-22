@@ -2,7 +2,8 @@ from google import genai
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Any
+import json
 from datetime import datetime
 from sqlalchemy.orm import Session
 import os
@@ -44,7 +45,7 @@ class PromptRequest(BaseModel):
 
 
 class PromptResponse(BaseModel):
-    response: str
+    response: Any
 
 
 class ConversationSchema(BaseModel):
@@ -77,7 +78,6 @@ async def root():
 # this is a post request that accepts a prompt and returns a response
 @app.post("/generate", response_model=PromptResponse)
 async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db)):
-    """Accept a prompt from the frontend and return a mock response."""
     prompt = prompt_request.prompt
     logger.info(f"Received prompt: {prompt}")
 
@@ -103,7 +103,14 @@ async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db))
         raise HTTPException(status_code=500, detail="Failed to save conversation")
 
     logger.info(f"Generated response: {text}")
-    return PromptResponse(response=text)
+    # Parse the model output into JSON (the system prompt instructs the model to output valid JSON)
+    try:
+        parsed = json.loads(text)
+    except Exception as e:
+        logger.exception(f"Failed to parse model output as JSON: {e}")
+        raise HTTPException(status_code=500, detail="Model output could not be parsed as JSON")
+
+    return PromptResponse(response=parsed)
 
 # returns all conversations from the database
 @app.get("/conversations", response_model=List[ConversationSchema])
