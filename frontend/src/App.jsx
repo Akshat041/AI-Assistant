@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import api from "./services/api";
 import MyButton from "./components/GenerateButton";
 import PromptInput from "./components/PromptInput";
-import ResponseBox from "./components/ResponseBox";
 import ConversationHistory from "./components/ConversationHistory";
+import Roadmap from "./components/Roadmap";
 import "./App.css";
 
 function App() {
   const [response, setResponse] = useState("Placeholder response.");
+  const [roadmap, setRoadmap] = useState(null);
   const [prompt, setPrompt] = useState("");
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,9 @@ function App() {
       }
       setLoading(true);
       const result = await api.post("/generate", { prompt });
-      setResponse(result?.data?.response ?? "No response received.");
+      // Prefer an explicit `roadmap` object from the API, fallback to `response`.
+      // setResponse(result?.data?.response ?? "No response received.");
+      setRoadmap(result?.data?.roadmap ?? result?.data ?? null);
       await fetchConversations();
     } catch (error) {
       console.error("Error generating response:", error);
@@ -52,7 +55,7 @@ function App() {
       <div className="response-section">
         <h2>Current Response</h2>
         <div className="section-divider" />
-        <ResponseBox response={response} />
+        <Roadmap roadmap={roadmap}></Roadmap>
       </div>
       <ConversationHistory conversations={conversations} />
     </div>
