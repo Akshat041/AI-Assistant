@@ -48,7 +48,7 @@ class PromptResponse(BaseModel):
     response: Any
 
 
-class ConversationSchema(BaseModel):
+class ProjectListSchema(BaseModel):
     id: int
     prompt: str
     response: str
@@ -92,10 +92,10 @@ async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db))
     # Persist to DB: create Conversation row, commit, refresh
     try:
         # Create a new Conversation instance and add it to the session
-        conv = models.Conversation(prompt=prompt, response=text)
+        conv = models.Project(prompt=prompt, response=text)
         db.add(conv)        # add to session
         db.commit()         # commit transaction
-        db.refresh(conv)    # populate conv.id and conv.created_at from DB
+        db.refresh(conv)    # populate conv.id and conv.created_at from DB 
     except Exception as e:
         db.rollback()
         logger.exception(f"Error saving conversation to DB: {e}")
@@ -113,6 +113,6 @@ async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db))
     return PromptResponse(response=parsed)
 
 # returns all conversations from the database
-@app.get("/conversations", response_model=List[ConversationSchema])
-async def get_conversations(db: Session = Depends(get_db)):
-    return db.query(models.Conversation).all()
+@app.get("/projects", response_model=List[ProjectListSchema])
+async def get_projects(db: Session = Depends(get_db)):
+    return db.query(models.Project).all()

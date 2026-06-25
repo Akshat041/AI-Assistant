@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import api from "./services/api";
 import MyButton from "./components/GenerateButton";
 import PromptInput from "./components/PromptInput";
-import ConversationHistory from "./components/ConversationHistory";
+import ProjectList from "./components/ProjectList";
 import Roadmap from "./components/Roadmap";
 import "./App.css";
 
@@ -10,21 +10,21 @@ function App() {
   const [response, setResponse] = useState("Placeholder response.");
   const [roadmap, setRoadmap] = useState(null);
   const [prompt, setPrompt] = useState("");
-  const [conversations, setConversations] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchConversations = async () => {
+  const fetchProjects = async () => {
     try {
       // Fetch the conversation history from the backend
-      const result = await api.get("/conversations");
-      setConversations(result?.data ?? []);
+      const result = await api.get("/projects");
+      setProjects(result?.data ?? []);
     } catch (error) {
-      console.error("Error fetching conversations:", error);
+      console.error("Error fetching projects:", error);
     }
   };
 
   useEffect(() => {
-    fetchConversations();
+    fetchProjects();
   }, []);
 
   const handleClick = async () => {
@@ -38,7 +38,7 @@ function App() {
       // Prefer an explicit `roadmap` object from the API, fallback to `response`.
       // setResponse(result?.data?.response ?? "No response received.");
       setRoadmap(result?.data?.roadmap ?? result?.data ?? null);
-      await fetchConversations();
+      await fetchProjects();
     } catch (error) {
       console.error("Error generating response:", error);
       setResponse("Error generating response.");
@@ -57,7 +57,7 @@ function App() {
         <div className="section-divider" />
         <Roadmap roadmap={roadmap}></Roadmap>
       </div>
-      <ConversationHistory conversations={conversations} />
+      <ProjectList projects={projects} />
     </div>
   );
 }

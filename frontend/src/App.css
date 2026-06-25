@@ -229,7 +229,7 @@ button:disabled {
 }
 
 .response-section,
-.conversation-history-section {
+.project-list-section {
   margin-top: 24px;
   padding: 20px;
   border: 1px solid var(--border);
@@ -238,7 +238,7 @@ button:disabled {
 }
 
 .response-section h2,
-.conversation-history-section h2 {
+.project-list-section h2 {
   margin: 0 0 8px;
   font-size: 1.2rem;
 }
@@ -258,13 +258,13 @@ button:disabled {
   line-height: 1.6;
 }
 
-.conversation-history {
+.projects {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.conversation-entry {
+.project-entry {
   padding: 14px 16px;
   border-radius: 12px;
   background: var(--panel);
