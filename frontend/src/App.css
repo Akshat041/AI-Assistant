@@ -249,6 +249,71 @@ button:disabled {
   margin: 12px 0 20px;
 }
 
+.roadmap-metadata {
+  text-align: left;
+}
+
+.roadmap-metadata h3,
+.roadmap-metadata h4 {
+  margin-bottom: 8px;
+  color: var(--text-h);
+}
+
+.roadmap-milestones {
+  margin-top: 24px;
+}
+
+.roadmap-milestones ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.roadmap-milestone {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(170, 59, 255, 0.04);
+}
+
+.roadmap-milestone-title {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: var(--text-h);
+}
+
+.roadmap-milestone-section + .roadmap-milestone-section {
+  margin-top: 10px;
+}
+
+.roadmap-section-label {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.roadmap-milestone-goal,
+.roadmap-milestone-verification p,
+.roadmap-milestone-steps {
+  margin: 0;
+}
+
+.roadmap-milestone-steps {
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+.roadmap-milestone-steps li {
+  margin: 0;
+}
+
 .response-box {
   padding: 18px;
   min-height: 120px;

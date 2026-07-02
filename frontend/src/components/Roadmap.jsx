@@ -76,22 +76,34 @@ export default function Roadmap({ roadmap }) {
         {Array.isArray(milestones) && milestones.length ? (
           <ol>
             {milestones.map((m) => (
-              <li key={m.id ?? m.title}>
-                {m.title && <strong>{m.title}</strong>}
-                {m.goal && <p>{m.goal}</p>}
+              <li className="roadmap-milestone" key={m.id ?? m.title}>
+                {m.title && (
+                  <h5 className="roadmap-milestone-title">{m.title}</h5>
+                )}
+
+                {m.goal && (
+                  <div className="roadmap-milestone-section">
+                    <span className="roadmap-section-label">Goal</span>
+                    <p className="roadmap-milestone-goal">{m.goal}</p>
+                  </div>
+                )}
 
                 {Array.isArray(m.steps) && m.steps.length ? (
-                  <ul>
-                    {m.steps.map((s) => (
-                      <li key={s.id ?? s.task}>{s.task}</li>
-                    ))}
-                  </ul>
+                  <div className="roadmap-milestone-section">
+                    <span className="roadmap-section-label">Steps</span>
+                    <ul className="roadmap-milestone-steps">
+                      {m.steps.map((s) => (
+                        <li key={s.id ?? s.task}>{s.task}</li>
+                      ))}
+                    </ul>
+                  </div>
                 ) : null}
 
                 {m.verification && (
-                  <p>
-                    <em>Verification:</em> {m.verification}
-                  </p>
+                  <div className="roadmap-milestone-section roadmap-milestone-verification">
+                    <span className="roadmap-section-label">Verification</span>
+                    <p>{m.verification}</p>
+                  </div>
                 )}
               </li>
             ))}
