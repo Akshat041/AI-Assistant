@@ -128,4 +128,4 @@ npm run dev
 
 ## License
 
-This project is currently intended for educational and personal use.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
