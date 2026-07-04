@@ -1,4 +1,9 @@
-export default function ProjectList({ projects }) {
+export default function ProjectList({ projects, onProjectClick }) {
+  const handleProjectClick = (project) => {
+    if (onProjectClick) {
+      onProjectClick(project);
+    }
+  };
   return (
     <section className="project-list-section">
       <h2>Projects</h2>
@@ -13,7 +18,11 @@ export default function ProjectList({ projects }) {
             .map((project) => {
               const roadmap = tryParseJSON(project.response);
               return (
-                <div key={project.id} className="project-entry">
+                <div
+                  key={project.id}
+                  className="project-entry"
+                  onClick={() => handleProjectClick(project)}
+                >
                   <div className="project-response">
                     {roadmap?.projectName || "Untitled Project!"}
                   </div>

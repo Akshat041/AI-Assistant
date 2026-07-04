@@ -98,7 +98,7 @@ async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db))
         db.refresh(conv)    # populate conv.id and conv.created_at from DB 
     except Exception as e:
         db.rollback()
-        logger.exception(f"Error saving conversation to DB: {e}")
+        logger.exception(f"Error saving conversation to DB: {e}") 
         # Optionally return the LLM response anyway or raise an error
         raise HTTPException(status_code=500, detail="Failed to save conversation")
 
@@ -112,7 +112,7 @@ async def generate(prompt_request: PromptRequest, db: Session = Depends(get_db))
 
     return PromptResponse(response=parsed)
 
-# returns all conversations from the database
+# returns all projects from the database
 @app.get("/projects", response_model=List[ProjectListSchema])
 async def get_projects(db: Session = Depends(get_db)):
     return db.query(models.Project).all()

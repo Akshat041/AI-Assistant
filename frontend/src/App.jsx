@@ -13,9 +13,15 @@ function App() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const handleProjectClick = (project) => {
+    const parsed = JSON.parse(project.response);
+    setRoadmap(parsed);
+    setPrompt(parsed?.prompt || "");
+  };
+
   const fetchProjects = async () => {
     try {
-      // Fetch the conversation history from the backend
+      // Fetch the projects list from the backend
       const result = await api.get("/projects");
       setProjects(result?.data ?? []);
     } catch (error) {
@@ -57,7 +63,7 @@ function App() {
         <div className="section-divider" />
         <Roadmap roadmap={roadmap}></Roadmap>
       </div>
-      <ProjectList projects={projects} />
+      <ProjectList projects={projects} onProjectClick={handleProjectClick} />
     </div>
   );
 }
